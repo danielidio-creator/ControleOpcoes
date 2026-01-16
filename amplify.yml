@@ -15,6 +15,8 @@ frontend:
         - echo "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" >> .env.production
         - echo "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" >> .env.production
         - echo "OPLAB_API_KEY=$OPLAB_API_KEY" >> .env.production
+        - echo "MY_AWS_KEY=$MY_AWS_KEY" >> .env.production
+        - echo "MY_AWS_SECRET=$MY_AWS_SECRET" >> .env.production
         - npm run build
   artifacts:
     baseDirectory: .next
