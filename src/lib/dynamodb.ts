@@ -4,13 +4,7 @@ import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 const isDev = process.env.NODE_ENV === 'development';
 
 // DEBUG LOGS
-console.log("--- DynamoDB Init ---");
-console.log("NODE_ENV:", process.env.NODE_ENV);
-console.log("Has AWS_ACCESS_KEY_ID:", !!process.env.AWS_ACCESS_KEY_ID);
-console.log("Has AWS_ACCESS_KEY_ID:", !!process.env.AWS_ACCESS_KEY_ID);
-console.log("Has AWS_SECRET_ACCESS_KEY:", !!process.env.AWS_SECRET_ACCESS_KEY);
-console.log("Has MY_AWS_KEY:", !!process.env.MY_AWS_KEY);
-console.log("Has MY_AWS_SECRET:", !!process.env.MY_AWS_SECRET);
+// console.log("--- DynamoDB Init ---");
 
 const clientConfig: any = {
     region: "sa-east-1",
