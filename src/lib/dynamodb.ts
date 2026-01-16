@@ -19,12 +19,12 @@ if (isDev) {
         accessKeyId: "dummy",
         secretAccessKey: "dummy"
     };
-} else if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
-    // Force usage of Env Vars if present
+} else if ((process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) || (process.env.MY_AWS_KEY && process.env.MY_AWS_SECRET)) {
+    // Force usage of Env Vars (Standard or Custom)
     console.log("Using Explicit Env Var Credentials");
     clientConfig.credentials = {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID || process.env.MY_AWS_KEY,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || process.env.MY_AWS_SECRET
     };
 } else {
     console.log("Using Default Provider Chain");
