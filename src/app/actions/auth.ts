@@ -70,6 +70,16 @@ export async function loginUser(email: string, password: string) {
         return { success: true, email: emailLower };
     } catch (e: any) {
         console.error("Login Error:", e);
-        return { success: false, error: e.message };
+
+        // DEBUG: Return environment status to UI
+        const debugMsg = [
+            e.message,
+            `Region: ${process.env.AWS_REGION || 'undefined'}`,
+            `KeyID Present: ${!!process.env.AWS_ACCESS_KEY_ID}`,
+            `Secret Present: ${!!process.env.AWS_SECRET_ACCESS_KEY}`,
+            `Node Env: ${process.env.NODE_ENV}`
+        ].join(' | ');
+
+        return { success: false, error: debugMsg };
     }
 }
