@@ -100,44 +100,46 @@ export function PayoffChart({ strategy, currentPrice, width = 400, height = 200 
     const dispMax = Math.max(currentPrice * 1.2, maxS * 1.1);
 
     return (
-        <div className="relative border border-slate-100 rounded-lg bg-white p-2" style={{ width, height: 'auto' }}>
+        <div className="relative border border-slate-100 rounded-lg bg-white p-2 w-full">
             <h4 className="text-[10px] font-bold text-slate-500 mb-1">Payoff (No Vencimento)</h4>
-            <svg width={width} height={height + 35} className="overflow-visible">
-                {/* Zero Line (Breakeven P&L) */}
-                <line x1={0} y1={zeroY} x2={width} y2={zeroY} stroke="#cbd5e1" strokeWidth="1" strokeDasharray="4 2" />
+            <div className="w-full h-auto">
+                <svg viewBox={`0 0 ${width} ${height + 35}`} className="w-full h-auto overflow-visible" preserveAspectRatio="xMidYMid meet">
+                    {/* Zero Line (Breakeven P&L) */}
+                    <line x1={0} y1={zeroY} x2={width} y2={zeroY} stroke="#cbd5e1" strokeWidth="1" strokeDasharray="4 2" />
 
-                {/* Strikes Lines */}
-                {strikes.map((strike, idx) => {
-                    const sx = scaleX(strike);
-                    // Only draw if within view
-                    if (sx < 0 || sx > width) return null;
+                    {/* Strikes Lines */}
+                    {strikes.map((strike, idx) => {
+                        const sx = scaleX(strike);
+                        // Only draw if within view
+                        if (sx < 0 || sx > width) return null;
 
-                    // Stagger labels to avoid overlap
-                    const isStaggered = idx % 2 === 1;
-                    const labelY = height + 12 + (isStaggered ? 12 : 0);
+                        // Stagger labels to avoid overlap
+                        const isStaggered = idx % 2 === 1;
+                        const labelY = height + 12 + (isStaggered ? 12 : 0);
 
-                    return (
-                        <g key={idx}>
-                            <line x1={sx} y1={0} x2={sx} y2={height} stroke="#e2e8f0" strokeWidth="1" />
-                            {/* Optional: Extend line slightly for staggered labels */}
-                            {isStaggered && <line x1={sx} y1={height} x2={sx} y2={height + 5} stroke="#e2e8f0" strokeWidth="1" />}
+                        return (
+                            <g key={idx}>
+                                <line x1={sx} y1={0} x2={sx} y2={height} stroke="#e2e8f0" strokeWidth="1" />
+                                {/* Optional: Extend line slightly for staggered labels */}
+                                {isStaggered && <line x1={sx} y1={height} x2={sx} y2={height + 5} stroke="#e2e8f0" strokeWidth="1" />}
 
-                            <text x={sx} y={labelY} textAnchor="middle" fontSize="9" fill="#64748b" fontWeight="bold">
-                                {strike.toFixed(2)}
-                            </text>
-                        </g>
-                    );
-                })}
+                                <text x={sx} y={labelY} textAnchor="middle" fontSize="9" fill="#64748b" fontWeight="bold">
+                                    {strike.toFixed(2)}
+                                </text>
+                            </g>
+                        );
+                    })}
 
-                {/* Current Price Line */}
-                <line x1={currentX} y1={0} x2={currentX} y2={height} stroke="#60a5fa" strokeWidth="1" strokeDasharray="2 2" />
+                    {/* Current Price Line */}
+                    <line x1={currentX} y1={0} x2={currentX} y2={height} stroke="#60a5fa" strokeWidth="1" strokeDasharray="2 2" />
 
-                {/* Payoff Curve */}
-                <path d={pathD} fill="none" stroke="#3b82f6" strokeWidth="2" />
+                    {/* Payoff Curve */}
+                    <path d={pathD} fill="none" stroke="#3b82f6" strokeWidth="2" />
 
-                {/* Current Price Dot */}
-                <circle cx={currentX} cy={scaleY(data.find(d => Math.abs(d.spot - currentPrice) < 0.1)?.pnl || 0)} r="3" fill="#2563eb" />
-            </svg>
+                    {/* Current Price Dot */}
+                    <circle cx={currentX} cy={scaleY(data.find(d => Math.abs(d.spot - currentPrice) < 0.1)?.pnl || 0)} r="3" fill="#2563eb" />
+                </svg>
+            </div>
             <div className="flex justify-between text-[9px] text-slate-400 mt-0 border-t border-slate-100 pt-2">
                 <span>{dispMin.toFixed(1)}</span>
                 <span className="text-blue-500 font-bold">{currentPrice.toFixed(2)} (Spot)</span>
