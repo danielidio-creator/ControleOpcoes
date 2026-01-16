@@ -372,7 +372,7 @@ export function StrategyList({ userEmail, onEdit, onDelete }: StrategyListProps)
                                             {parent ? (
                                                 <div className="flex items-center gap-2 relative group/parent-tooltip">
                                                     <span className="font-bold text-slate-700 text-xs cursor-help border-b border-dotted border-slate-300">{parent}</span>
-                                                    {currentPrice && (
+                                                    {currentPrice != null && (
                                                         <span className="bg-slate-200 text-slate-600 px-1.5 rounded text-[10px] font-mono">
                                                             {currentPrice.toFixed(2)}
                                                         </span>
@@ -384,13 +384,13 @@ export function StrategyList({ userEmail, onEdit, onDelete }: StrategyListProps)
                                                         <div className="flex justify-between text-[10px] mb-1">
                                                             <span className="text-slate-400">Inicial (DB):</span>
                                                             <span className="font-mono text-slate-600 font-bold">
-                                                                {s.legs[0]?.underlyingIvRank !== undefined ? s.legs[0].underlyingIvRank.toFixed(1) : '-'}
+                                                                {s.legs[0]?.underlyingIvRank != null ? s.legs[0].underlyingIvRank.toFixed(1) : '-'}
                                                             </span>
                                                         </div>
                                                         <div className="flex justify-between text-[10px]">
                                                             <span className="text-slate-400">Atual (Live):</span>
                                                             <span className="font-mono text-blue-600 font-bold">
-                                                                {marketData[parent]?.ivRank !== undefined ? marketData[parent].ivRank?.toFixed(1) : '-'}
+                                                                {marketData[parent]?.ivRank != null ? marketData[parent].ivRank.toFixed(1) : '-'}
                                                             </span>
                                                         </div>
                                                     </div>
@@ -487,24 +487,24 @@ export function StrategyList({ userEmail, onEdit, onDelete }: StrategyListProps)
                                                                                         <div className="text-right text-slate-400 font-medium">Atual</div>
 
                                                                                         <div className="font-bold text-slate-600">IV</div>
-                                                                                        <div className="text-right font-mono text-slate-500">{leg.greeks?.volatility !== undefined ? leg.greeks.volatility.toFixed(1) + '%' : '-'}</div>
-                                                                                        <div className="text-right font-mono text-blue-600 font-bold">{currentGreeks?.volatility !== undefined ? currentGreeks.volatility.toFixed(1) + '%' : '-'}</div>
+                                                                                        <div className="text-right font-mono text-slate-500">{leg.greeks?.volatility != null ? leg.greeks.volatility.toFixed(1) + '%' : '-'}</div>
+                                                                                        <div className="text-right font-mono text-blue-600 font-bold">{currentGreeks?.volatility != null ? currentGreeks.volatility.toFixed(1) + '%' : '-'}</div>
 
                                                                                         <div className="font-bold text-slate-600">Delta</div>
-                                                                                        <div className="text-right font-mono text-slate-500">{leg.greeks?.delta !== undefined ? leg.greeks.delta.toFixed(2) : '-'}</div>
-                                                                                        <div className="text-right font-mono text-blue-600 font-bold">{currentGreeks?.delta !== undefined ? currentGreeks.delta.toFixed(2) : '-'}</div>
+                                                                                        <div className="text-right font-mono text-slate-500">{leg.greeks?.delta != null ? leg.greeks.delta.toFixed(2) : '-'}</div>
+                                                                                        <div className="text-right font-mono text-blue-600 font-bold">{currentGreeks?.delta != null ? currentGreeks.delta.toFixed(2) : '-'}</div>
 
                                                                                         <div className="font-bold text-slate-600">Gamma</div>
-                                                                                        <div className="text-right font-mono text-slate-500">{leg.greeks?.gamma !== undefined ? leg.greeks.gamma.toFixed(3) : '-'}</div>
-                                                                                        <div className="text-right font-mono text-blue-600 font-bold">{currentGreeks?.gamma !== undefined ? currentGreeks.gamma.toFixed(3) : '-'}</div>
+                                                                                        <div className="text-right font-mono text-slate-500">{leg.greeks?.gamma != null ? leg.greeks.gamma.toFixed(3) : '-'}</div>
+                                                                                        <div className="text-right font-mono text-blue-600 font-bold">{currentGreeks?.gamma != null ? currentGreeks.gamma.toFixed(3) : '-'}</div>
 
                                                                                         <div className="font-bold text-slate-600">Theta</div>
-                                                                                        <div className="text-right font-mono text-slate-500">{leg.greeks?.theta !== undefined ? leg.greeks.theta.toFixed(3) : '-'}</div>
-                                                                                        <div className="text-right font-mono text-blue-600 font-bold">{currentGreeks?.theta !== undefined ? currentGreeks.theta.toFixed(3) : '-'}</div>
+                                                                                        <div className="text-right font-mono text-slate-500">{leg.greeks?.theta != null ? leg.greeks.theta.toFixed(3) : '-'}</div>
+                                                                                        <div className="text-right font-mono text-blue-600 font-bold">{currentGreeks?.theta != null ? currentGreeks.theta.toFixed(3) : '-'}</div>
 
                                                                                         <div className="font-bold text-slate-600">Vega</div>
-                                                                                        <div className="text-right font-mono text-slate-500">{leg.greeks?.vega !== undefined ? leg.greeks.vega.toFixed(3) : '-'}</div>
-                                                                                        <div className="text-right font-mono text-blue-600 font-bold">{currentGreeks?.vega !== undefined ? currentGreeks.vega.toFixed(3) : '-'}</div>
+                                                                                        <div className="text-right font-mono text-slate-500">{leg.greeks?.vega != null ? leg.greeks.vega.toFixed(3) : '-'}</div>
+                                                                                        <div className="text-right font-mono text-blue-600 font-bold">{currentGreeks?.vega != null ? currentGreeks.vega.toFixed(3) : '-'}</div>
                                                                                     </div>
                                                                                 </div>
                                                                             </td>
@@ -523,7 +523,7 @@ export function StrategyList({ userEmail, onEdit, onDelete }: StrategyListProps)
                                                                             <td className="px-3 py-2 text-center">{leg.quantity}</td>
                                                                             <td className="px-3 py-2 text-right text-slate-500">{leg.entryPremium.toFixed(2)}</td>
                                                                             <td className="px-3 py-2 text-right font-bold text-slate-700">
-                                                                                {premium !== undefined ? premium.toFixed(2) : '-'}
+                                                                                {premium != null ? premium.toFixed(2) : '-'}
                                                                             </td>
                                                                         </tr>
                                                                     );
