@@ -1,0 +1,36 @@
+{
+    "version": "1",
+    "auth": {
+        "aws_region": "us-east-1",
+        "user_pool_id": "us-east-1_xxxxxxxxx",
+        "user_pool_client_id": "xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "identity_pool_id": "us-east-1:xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+        "mfa_configuration": "OFF",
+        "mfa_methods": [],
+        "password_policy": {
+            "min_length": 8,
+            "require_lowercase": true,
+            "require_uppercase": true,
+            "require_numbers": true,
+            "require_symbols": true
+        },
+        "standard_required_attributes": [
+            "email"
+        ],
+        "username_attributes": [
+            "email"
+        ],
+        "user_verification_types": [
+            "EMAIL"
+        ],
+        "unauthenticated_identities_enabled": true
+    },
+    "data": {
+        "url": "https://example.appsync-api.us-east-1.amazonaws.com/graphql",
+        "aws_region": "us-east-1",
+        "default_authorization_type": "AMAZON_COGNITO_USER_POOLS",
+        "authorization_types": [
+            "AWS_IAM"
+        ]
+    }
+}
