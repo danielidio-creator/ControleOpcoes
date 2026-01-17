@@ -31,6 +31,8 @@ export default function Home() {
   const [globalType, setGlobalType] = useState<StrategyType>('DIRECAO');
   const [globalStructure, setGlobalStructure] = useState<StrategyStructure>('CALL SPREAD');
   const [globalStatus, setGlobalStatus] = useState<'Em Andamento' | 'Encerrada'>('Em Andamento');
+  const [startDate, setStartDate] = useState<string>(new Date().toISOString().split('T')[0]); // Default to Today
+  const [initialSpotPrice, setInitialSpotPrice] = useState<number | undefined>(undefined);
   const [editingStrategy, setEditingStrategy] = useState<Strategy | null>(null);
 
   // Restore session
@@ -55,6 +57,8 @@ export default function Home() {
     setGlobalType('DIRECAO');
     setGlobalStructure('CALL SPREAD');
     setGlobalStatus('Em Andamento');
+    setStartDate(new Date().toISOString().split('T')[0]);
+    setInitialSpotPrice(undefined);
     setEditingStrategy(null);
     setMode('CREATE');
   };
@@ -72,6 +76,8 @@ export default function Home() {
     setGlobalType(strategy.type);
     setGlobalStructure(strategy.structure || 'CALL SPREAD');
     setGlobalStatus(strategy.status || 'Em Andamento');
+    setStartDate(strategy.startDate || new Date().toISOString().split('T')[0]);
+    setInitialSpotPrice(strategy.initialSpotPrice);
     setEditingStrategy(strategy);
     setMode('EDIT');
   };
@@ -133,7 +139,9 @@ export default function Home() {
       status: mode === 'CREATE' ? 'Em Andamento' : globalStatus,
       legs: legsWithGlobal,
       totalEntryPremium: totalPremium,
-      userEmail: userEmail // Bind to current user
+      userEmail: userEmail, // Bind to current user
+      startDate: startDate,
+      initialSpotPrice: initialSpotPrice ? Number(initialSpotPrice) : undefined
     };
 
     if (mode === 'EDIT' && editingStrategy) {
@@ -247,6 +255,32 @@ export default function Home() {
                     <option value="Em Andamento">Em Andamento</option>
                     <option value="Encerrada">Encerrada</option>
                   </select>
+                </div>
+
+                {/* Date & Spot Price Row */}
+                <div className="col-span-3">
+                  <label className="text-[10px] text-slate-500 font-bold uppercase block mb-1">Data Op.</label>
+                  <input
+                    type="date"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                    className="w-full bg-slate-50 border border-slate-300 rounded px-3 py-2 text-sm font-bold text-slate-700 outline-none focus:border-blue-500"
+                  />
+                </div>
+
+                <div className="col-span-3">
+                  <label className="text-[10px] text-slate-500 font-bold uppercase block mb-1">Valor Dia (Spot)</label>
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs font-bold">R$</span>
+                    <input
+                      type="number"
+                      step="0.01"
+                      value={initialSpotPrice || ''}
+                      onChange={(e) => setInitialSpotPrice(e.target.value ? Number(e.target.value) : undefined)}
+                      placeholder="0.00"
+                      className="w-full bg-slate-50 border border-slate-300 rounded pl-8 pr-3 py-2 text-sm font-bold text-slate-700 outline-none focus:border-blue-500"
+                    />
+                  </div>
                 </div>
 
                 <div className="col-span-3 flex justify-end">

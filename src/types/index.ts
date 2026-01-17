@@ -47,6 +47,8 @@ export interface Strategy {
     createdAt: string;
     updatedAt: string;
     userEmail?: string;
+    startDate?: string; // YYYY-MM-DD
+    initialSpotPrice?: number;
 }
 
 // Oplab API Types

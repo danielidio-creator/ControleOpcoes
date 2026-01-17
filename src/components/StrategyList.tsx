@@ -309,6 +309,10 @@ export function StrategyList({ userEmail, onEdit, onDelete }: StrategyListProps)
                     const pnl = currentValue - initialCost;
                     const pnlPercent = initialCost !== 0 ? (pnl / Math.abs(initialCost)) * 100 : 0;
 
+                    // New Metrics
+                    const daysOpen = s.startDate ? Math.floor((new Date().getTime() - new Date(s.startDate).getTime()) / (1000 * 60 * 60 * 24)) : 0;
+                    const spotReturn = currentPrice && s.initialSpotPrice ? ((currentPrice - s.initialSpotPrice) / s.initialSpotPrice) * 100 : 0;
+
                     return (
                         <div key={s.id} className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
                             {/* Card Header */}
@@ -319,7 +323,10 @@ export function StrategyList({ userEmail, onEdit, onDelete }: StrategyListProps)
                                         {s.type}
                                     </span>
                                 </div>
-                                <div className={`w-2.5 h-2.5 rounded-full ${s.status === 'Encerrada' ? 'bg-slate-400' : 'bg-green-500 shadow-[0_0_4px_rgba(34,197,94,0.4)]'}`}></div>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[10px] font-bold text-slate-400">{daysOpen}d</span>
+                                    <div className={`w-2.5 h-2.5 rounded-full ${s.status === 'Encerrada' ? 'bg-slate-400' : 'bg-green-500 shadow-[0_0_4px_rgba(34,197,94,0.4)]'}`}></div>
+                                </div>
                             </div>
 
                             {/* Card Body */}
@@ -328,7 +335,16 @@ export function StrategyList({ userEmail, onEdit, onDelete }: StrategyListProps)
                                     <div className="text-[10px] text-slate-400 uppercase font-bold">Ativo Base</div>
                                     <div className="flex items-center gap-1.5">
                                         <span className="text-sm font-bold text-slate-700">{parent || '-'}</span>
-                                        {currentPrice != null && <span className="text-[10px] bg-slate-100 px-1 rounded text-slate-600 font-mono">{currentPrice.toFixed(2)}</span>}
+                                        {currentPrice != null && (
+                                            <div className="flex flex-col leading-none">
+                                                <span className="text-[10px] bg-slate-100 px-1 rounded text-slate-600 font-mono">{currentPrice.toFixed(2)}</span>
+                                                {s.initialSpotPrice && (
+                                                    <span className={`text-[9px] font-bold ${spotReturn >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                                                        {spotReturn > 0 ? '+' : ''}{spotReturn.toFixed(1)}%
+                                                    </span>
+                                                )}
+                                            </div>
+                                        )}
                                     </div>
                                     <div className="text-[10px] text-slate-400 mt-0.5">IV Rank: {marketData[parent || '']?.ivRank != null ? marketData[parent || '']?.ivRank?.toFixed(1) : '-'}</div>
                                 </div>
@@ -435,6 +451,7 @@ export function StrategyList({ userEmail, onEdit, onDelete }: StrategyListProps)
                             >
                                 <div className="flex items-center gap-1">Estrutura <SortIcon column="structure" /></div>
                             </th>
+                            <th className="px-4 py-3 text-right">Início</th>
                             <th className="px-4 py-3 text-right">Custo Inic.</th>
                             <th className="px-4 py-3 text-right">Valor Atual</th>
                             <th
@@ -460,6 +477,10 @@ export function StrategyList({ userEmail, onEdit, onDelete }: StrategyListProps)
                             const initialCost = s.totalEntryPremium || 0;
                             const pnl = currentValue - initialCost;
                             const pnlPercent = initialCost !== 0 ? (pnl / Math.abs(initialCost)) * 100 : 0;
+
+                            // New Metrics (Desktop)
+                            const daysOpen = s.startDate ? Math.floor((new Date().getTime() - new Date(s.startDate).getTime()) / (1000 * 60 * 60 * 24)) : 0;
+                            const spotReturn = currentPrice && s.initialSpotPrice ? ((currentPrice - s.initialSpotPrice) / s.initialSpotPrice) * 100 : 0;
 
                             return (
                                 <React.Fragment key={s.id}>
@@ -491,9 +512,16 @@ export function StrategyList({ userEmail, onEdit, onDelete }: StrategyListProps)
                                                 <div className="flex items-center gap-2 relative group/parent-tooltip">
                                                     <span className="font-bold text-slate-700 text-xs cursor-help border-b border-dotted border-slate-300">{parent}</span>
                                                     {currentPrice != null && (
-                                                        <span className="bg-slate-200 text-slate-600 px-1.5 rounded text-[10px] font-mono">
-                                                            {currentPrice.toFixed(2)}
-                                                        </span>
+                                                        <div className="flex flex-col items-start leading-none ml-1">
+                                                            <span className="bg-slate-200 text-slate-600 px-1.5 rounded text-[10px] font-mono">
+                                                                {currentPrice.toFixed(2)}
+                                                            </span>
+                                                            {s.initialSpotPrice && (
+                                                                <span className={`text-[9px] font-bold ml-0.5 ${spotReturn >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                                                                    {spotReturn > 0 ? '+' : ''}{spotReturn.toFixed(1)}%
+                                                                </span>
+                                                            )}
+                                                        </div>
                                                     )}
 
                                                     {/* IV Rank Tooltip (Parent) */}
@@ -529,6 +557,10 @@ export function StrategyList({ userEmail, onEdit, onDelete }: StrategyListProps)
                                                 </div>
                                                 <span className="text-slate-500 text-[10px] font-bold uppercase">{s.structure || '-'}</span>
                                             </div>
+                                        </td>
+                                        <td className="px-4 py-3 text-right font-mono text-xs text-slate-400">
+                                            <div>{s.startDate ? new Date(s.startDate).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit' }) : '-'}</div>
+                                            <div className="text-[10px] font-bold">({daysOpen}d)</div>
                                         </td>
                                         <td className="px-4 py-3 text-right font-mono text-xs text-slate-500">
                                             {initialCost.toFixed(2)}
