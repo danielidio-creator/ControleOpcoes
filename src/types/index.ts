@@ -49,6 +49,8 @@ export interface Strategy {
     userEmail?: string;
     startDate?: string; // YYYY-MM-DD
     initialSpotPrice?: number;
+    stopLossPercent?: number; // Default 50
+    maxGainPercent?: number; // Default 70
 }
 
 // Oplab API Types

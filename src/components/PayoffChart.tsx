@@ -88,6 +88,7 @@ export function PayoffChart({ strategy, currentPrice, width = 400, height = 200 
 
     const zeroY = scaleY(0);
     const currentX = scaleX(currentPrice);
+    const initialSpotX = strategy.initialSpotPrice ? scaleX(strategy.initialSpotPrice) : null;
 
     // Unique Strikes (Sorted)
     const strikes = Array.from(new Set(strategy.legs.map(l => l.strike))).sort((a, b) => a - b);
@@ -136,13 +137,27 @@ export function PayoffChart({ strategy, currentPrice, width = 400, height = 200 
                     {/* Payoff Curve */}
                     <path d={pathD} fill="none" stroke="#3b82f6" strokeWidth="2" />
 
+                    {/* Initial Spot Line */}
+                    {initialSpotX !== null && initialSpotX >= 0 && initialSpotX <= width && (
+                        <g>
+                            <line x1={initialSpotX} y1={0} x2={initialSpotX} y2={height} stroke="#a855f7" strokeWidth="1.5" strokeDasharray="3 3" />
+                            <text x={initialSpotX} y={10} textAnchor="middle" fontSize="9" fill="#a855f7" fontWeight="bold">Início</text>
+                            <text x={initialSpotX} y={20} textAnchor="middle" fontSize="8" fill="#a855f7">{strategy.initialSpotPrice?.toFixed(2)}</text>
+                        </g>
+                    )}
+
                     {/* Current Price Dot */}
                     <circle cx={currentX} cy={scaleY(data.find(d => Math.abs(d.spot - currentPrice) < 0.1)?.pnl || 0)} r="3" fill="#2563eb" />
                 </svg>
             </div>
             <div className="flex justify-between text-[9px] text-slate-400 mt-0 border-t border-slate-100 pt-2">
                 <span>{dispMin.toFixed(1)}</span>
-                <span className="text-blue-500 font-bold">{currentPrice.toFixed(2)} (Spot)</span>
+                <div className="flex gap-3">
+                    {strategy.initialSpotPrice && (
+                        <span className="text-purple-500 font-bold">{strategy.initialSpotPrice.toFixed(2)} (Início)</span>
+                    )}
+                    <span className="text-blue-500 font-bold">{currentPrice.toFixed(2)} (Agora)</span>
+                </div>
                 <span>{dispMax.toFixed(1)}</span>
             </div>
         </div>

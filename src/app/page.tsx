@@ -33,6 +33,8 @@ export default function Home() {
   const [globalStatus, setGlobalStatus] = useState<'Em Andamento' | 'Encerrada'>('Em Andamento');
   const [startDate, setStartDate] = useState<string>(new Date().toISOString().split('T')[0]); // Default to Today
   const [initialSpotPrice, setInitialSpotPrice] = useState<number | undefined>(undefined);
+  const [stopLoss, setStopLoss] = useState<number>(50);
+  const [maxGain, setMaxGain] = useState<number>(70);
   const [editingStrategy, setEditingStrategy] = useState<Strategy | null>(null);
 
   // Restore session
@@ -59,6 +61,8 @@ export default function Home() {
     setGlobalStatus('Em Andamento');
     setStartDate(new Date().toISOString().split('T')[0]);
     setInitialSpotPrice(undefined);
+    setStopLoss(50);
+    setMaxGain(70);
     setEditingStrategy(null);
     setMode('CREATE');
   };
@@ -78,6 +82,8 @@ export default function Home() {
     setGlobalStatus(strategy.status || 'Em Andamento');
     setStartDate(strategy.startDate || new Date().toISOString().split('T')[0]);
     setInitialSpotPrice(strategy.initialSpotPrice);
+    setStopLoss(strategy.stopLossPercent ?? 50);
+    setMaxGain(strategy.maxGainPercent ?? 70);
     setEditingStrategy(strategy);
     setMode('EDIT');
   };
@@ -141,7 +147,9 @@ export default function Home() {
       totalEntryPremium: totalPremium,
       userEmail: userEmail, // Bind to current user
       startDate: startDate,
-      initialSpotPrice: initialSpotPrice ? Number(initialSpotPrice) : undefined
+      initialSpotPrice: initialSpotPrice ? Number(initialSpotPrice) : undefined,
+      stopLossPercent: Number(stopLoss),
+      maxGainPercent: Number(maxGain)
     };
 
     if (mode === 'EDIT' && editingStrategy) {
@@ -279,6 +287,27 @@ export default function Home() {
                       onChange={(e) => setInitialSpotPrice(e.target.value ? Number(e.target.value) : undefined)}
                       placeholder="0.00"
                       className="w-full bg-slate-50 border border-slate-300 rounded pl-8 pr-3 py-2 text-sm font-bold text-slate-700 outline-none focus:border-blue-500"
+                    />
+                  </div>
+                </div>
+
+                <div className="col-span-3 grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="text-[10px] text-slate-500 font-bold uppercase block mb-1">Stop Loss (-%)</label>
+                    <input
+                      type="number"
+                      value={stopLoss}
+                      onChange={(e) => setStopLoss(Number(e.target.value))}
+                      className="w-full bg-red-50 border border-red-200 rounded px-2 py-2 text-sm font-bold text-red-700 outline-none focus:border-red-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] text-slate-500 font-bold uppercase block mb-1">Max Gain (+%)</label>
+                    <input
+                      type="number"
+                      value={maxGain}
+                      onChange={(e) => setMaxGain(Number(e.target.value))}
+                      className="w-full bg-green-50 border border-green-200 rounded px-2 py-2 text-sm font-bold text-green-700 outline-none focus:border-green-500"
                     />
                   </div>
                 </div>
